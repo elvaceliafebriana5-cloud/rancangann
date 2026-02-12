@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ obat_elva.nama_obat_elva }}</title>
+</head>
+<body>
+    <h2>{{ obat_elva.nama_obat_elva }}</h2>
+    <p>Kategori: {{ obat_elva.nama_kategori_elva }}</p>
+    <p>Harga: Rp {{ "{:,.0f}".format(obat_elva.harga_elva) }}</p>
+    <p>Stok: {{ obat_elva.stok_elva }}</p>
+
+    <a href="{{ url_for('shop_online_elva') }}">← Kembali</a>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Pesanan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+    <div class="card shadow">
+        <div class="card-body">
+
+            <h5 class="mb-3">Pesanan Berhasil Dibuat 🎉</h5>
+
+            <p>No Faktur: <strong>{{ transaksi.no_faktur_elva }}</strong></p>
+            <p>Status: <span class="badge bg-warning">{{ transaksi.status_elva }}</span></p>
+            <p>Pilihan: {{ transaksi.kurir_elva }}</p>
+            <p>No Resi: {{ transaksi.no_resi_elva or '-' }}</p>
+            {% if qr_path %}
+            <hr>
+            <div class="text-center mt-4">
+                <h5>Tunjukkan QR ini ke Kasir</h5>
+                <img src="/{{ qr_path }}" width="220">
+                <p class="small text-muted">
+                    Pesanan Ambil Sendiri · Sudah Dibayar
+                </p>
+            </div>
+            {% endif %}
+
+
+            <hr>
+
+            <ul class="list-group mb-3">
+                {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <div>
+                        {{ item.nama_obat_elva }}
+                        <small class="text-muted">
+                            x{{ item.jumlah_elva }}
+                        </small>
+                    </div>
+                    <span>
+                        Rp {{ item.total_elva }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h5 class="text-end">
+                Total Bayar:
+                <strong>Rp {{ transaksi.total_elva }}</strong>
+            </h5>
+
+            <a href="{{ url_for('shop_online_elva') }}"
+               class="btn btn-primary mt-3">
+                Kembali Belanja
+            </a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

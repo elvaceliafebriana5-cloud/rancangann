@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+    <h3 class="mb-4">Checkout Pesanan</h3>
+
+    <div class="row">
+
+        <!-- ================= DATA PENGIRIMAN ================= -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header fw-bold">Data Pengiriman</div>
+                <div class="card-body">
+
+                    <!-- FORM UPDATE KURIR -->
+                    <form method="GET" action="{{ url_for('checkout_form_elva') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Kurir</label>
+                            <select name="kurir_elva" class="form-select" required>
+                                <option value="">-- Pilih Kurir --</option>
+                                <option value="Ambil Sendiri|0"
+                                    {% if kurir_elva == 'Ambil Sendiri' %}selected{% endif %}>
+                                    Ambil Sendiri (Gratis)
+                                </option>
+                                <option value="Hemat|2000"
+                                    {% if kurir_elva == 'Hemat' %}selected{% endif %}>
+                                    Hemat - Rp2.000
+                                </option>
+                                <option value="Reguler|5000"
+                                    {% if kurir_elva == 'Reguler' %}selected{% endif %}>
+                                    Reguler - Rp5.000
+                                </option>
+                            </select>
+
+                            <button class="btn btn-outline-primary w-100 mt-2">
+                                Update Kurir
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr>
+
+                    <!-- FORM CHECKOUT -->
+                    <form method="POST" action="{{ url_for('checkout_online_elva') }}">
+
+                        <input type="hidden" name="kurir_elva"
+                               value="{{ kurir_elva }}|{{ ongkir_elva }}">
+
+                        {% if kurir_elva != 'Ambil Sendiri' %}
+                        <div class="mb-3">
+                            <label class="form-label">Alamat Pengiriman</label>
+                            <textarea name="alamat_elva"
+                                      class="form-control"
+                                      required></textarea>
+                        </div>
+                        {% else %}
+                        <input type="hidden" name="alamat_elva" value="">
+                        <div class="alert alert-info small">
+                            Pesanan akan diambil langsung di apotek.
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select name="metode_bayar_elva" class="form-select" required>
+                                <option value="">-- Pilih --</option>
+                                <option value="COD">COD</option>
+                                <option value="DANA">DANA</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-success w-100">
+                            Proses Checkout
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RINGKASAN ================= -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header fw-bold">Ringkasan Pesanan</div>
+                <div class="card-body">
+
+                    <ul class="list-group mb-3">
+                        {% for item in cart_elva %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                                {{ item.nama_obat_elva }}
+                                <small class="text-muted">
+                                    x{{ item.jumlah_elva }}
+                                </small>
+                            </div>
+                            <span>
+                                Rp {{ item.harga_elva * item.jumlah_elva }}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <p>Subtotal : <strong>Rp {{ subtotal_elva }}</strong></p>
+                    <p>Pajak (10%) : <strong>Rp {{ pajak_elva }}</strong></p>
+
+                    {% if diskon_elva > 0 %}
+                    <p class="text-success">
+                        Diskon :
+                        <strong>- Rp {{ diskon_elva }}</strong>
+                    </p>
+                    {% endif %}
+
+                    <p>Ongkir : <strong>Rp {{ ongkir_elva }}</strong></p>
+                    <hr>
+                    <p class="fs-5">
+                        Total :
+                        <strong>Rp {{ total_sementara_elva }}</strong>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
